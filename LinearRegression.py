@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import urllib, json
+import urllib
+import json
+from sklearn.metrics import r2_score
 
 
 def estimate_coef(x, y):
@@ -70,9 +72,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-
-#_______________V2__________________________
+# _______________V2__________________________
 #  Import required libraries:
 # import pandas as pd
 # import numpy as np

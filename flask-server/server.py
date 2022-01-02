@@ -8,6 +8,19 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 
 
+# algorithm examples
+# https://colab.research.google.com/drive/1CdiInssgUbBJ9GB2D4n_RSsuAjhsNTkk?usp=sharing
+
+# Extract data
+def extract_data(cazuri_array, index_array):
+    with urllib.request.urlopen("https://covid19.primariatm.ro/istoric-covid19-tm.json") as url:
+        data = json.loads(url.read().decode())
+        for i in data:
+            cazuri_array.append(i['cazuri'])
+            index_array.append(len(cazuri_array) - 1)
+    return cazuri_array.reverse()
+
+
 # Exponential Function :
 def expo_func(x, a, b):
     return a * b ** x
@@ -44,12 +57,7 @@ def linear():
     # get data from json
     cazuri_array = []
     index_array = []
-    with urllib.request.urlopen("https://covid19.primariatm.ro/istoric-covid19-tm.json") as url:
-        data = json.loads(url.read().decode())
-        for i in data:
-            cazuri_array.append(i['cazuri'])
-            index_array.append(len(cazuri_array) - 1)
-    cazuri_array.reverse()
+    extract_data(cazuri_array, index_array)
     # print(cazuri_array)
     # print(index_array)
 
@@ -72,17 +80,12 @@ def log():
     # Y = a + b*ln(X)
     cazuri_array = []
     index_array = []
-    with urllib.request.urlopen("https://covid19.primariatm.ro/istoric-covid19-tm.json") as url:
-        data = json.loads(url.read().decode())
-        # data = data[0:200]
-        for i in data:
-            cazuri_array.append(i['cazuri'])
-            index_array.append(len(cazuri_array) - 1)
-    cazuri_array.reverse()
+    extract_data(cazuri_array, index_array)
     cases = cazuri_array
 
     # incat uneroi avem zile cu 0 cazuri trebuie sa facem replace missing values (nu putem aveam log(0)! ->
     # -> putem sa inclocuim valoarea 0 cu media sau cu 1 (basically nu difera valoarea finala)
+
     # m = np.median(cases[cases > 0])
     # cases[cases == 0] = m
 
@@ -121,11 +124,11 @@ def log():
     Y_plot = a + b * np.log(X)
 
     # Check the accuracy:
-    Accuracy = r2_score(Y, Y_plot)
+    accuracy = r2_score(Y, Y_plot)
     return {
         'aValue': a,
         'bValue': b,
-        'accuracy': Accuracy
+        'accuracy': accuracy
     }
 
 
@@ -134,13 +137,7 @@ def expo():
     # Dataset values :
     cazuri_array = []
     index_array = []
-    with urllib.request.urlopen("https://covid19.primariatm.ro/istoric-covid19-tm.json") as url:
-        data = json.loads(url.read().decode())
-        '''data = data[0:200]'''
-        for i in data:
-            cazuri_array.append(i['cazuri'])
-            index_array.append(len(cazuri_array) - 1)
-    cazuri_array.reverse()
+    extract_data(cazuri_array, index_array)
 
     # popt :Optimal values for the parameters
     # pcov :The estimated covariance of popt

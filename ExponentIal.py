@@ -12,7 +12,7 @@ cazuri_array = []
 index_array = []
 with urllib.request.urlopen("https://covid19.primariatm.ro/istoric-covid19-tm.json") as url:
     data = json.loads(url.read().decode())
-    data = data[0:200]
+    # data = data[0:200] vedem ca in ultimele 200 de zile se observa o crestere, dar daca lucram pe tot setul, va fi o scadere
     for i in data:
         cazuri_array.append(i['cazuri'])
         index_array.append(len(cazuri_array) - 1)
